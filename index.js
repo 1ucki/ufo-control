@@ -33,13 +33,13 @@ wss.on('connection', function connection(ws) {
           state.flying = true
         }
       } else if (msg.command === 'front') {
-        client.front(0.1)
-      } else if (msg.command === 'back') {
-        client.back(1)
-
-        setTimeout(() => {
-          client.stop()
-        }, 100)
+        client.front(0.3)
+      } else if (msg.command === 'stop') {
+        client.stop()
+      } else if (msg.command === 'counter-clockwise') {
+        client.counterClockwise(0.3)
+      } else if (msg.command === 'clockwise') {
+        client.clockwise(0.3)
       } else if (msg.command === 'blink') {
         client.animateLeds('blinkRed', 5, 1)
       }
