@@ -14,6 +14,10 @@ app.listen(port)
 const client = drone.createClient({ frameRate: 2 })
 const stream = client.getPngStream()
 
+/* client.on('navdata', data => {
+  console.log(data.demo.batteryPercentage)
+}) */
+
 let state = {
   flying: false
 }
@@ -32,14 +36,20 @@ wss.on('connection', function connection(ws) {
           client.takeoff()
           state.flying = true
         }
-      } else if (msg.command === 'front') {
-        client.front(0.3)
       } else if (msg.command === 'stop') {
         client.stop()
+      } else if (msg.command === 'front') {
+        client.front(0.2)
+      } else if (msg.command === 'back') {
+        client.back(0.2)
+      } else if (msg.command === 'left') {
+        client.left(0.2)
+      } else if (msg.command === 'right') {
+        client.right(0.2)
       } else if (msg.command === 'counter-clockwise') {
-        client.counterClockwise(0.3)
+        client.counterClockwise(1)
       } else if (msg.command === 'clockwise') {
-        client.clockwise(0.3)
+        client.clockwise(1)
       } else if (msg.command === 'blink') {
         client.animateLeds('blinkRed', 5, 1)
       }
@@ -58,4 +68,4 @@ wss.on('connection', function connection(ws) {
   })
 })
 
-console.log(`drone streamin' at http://localhost:${ port }`)
+console.log(`ufo streamin' at http://localhost:${ port }`)

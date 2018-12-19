@@ -37,7 +37,7 @@ document.onkeydown = (event) => {
   } else if (event.keyCode === 87) {
     sendCommand('front')
   } else if (event.keyCode === 83) {
-    sendCommand('stop')
+    sendCommand('back')
   } else if (event.keyCode === 65) {
     sendCommand('left')
   } else if (event.keyCode === 68) {
@@ -46,5 +46,16 @@ document.onkeydown = (event) => {
     sendCommand('counter-clockwise')
   } else if (event.keyCode === 69) {
     sendCommand('clockwise')
+  }
+}
+
+document.onkeyup = (event) => {
+  if (event.keyCode === 87 ||
+      event.keyCode === 83 ||
+      event.keyCode === 65 ||
+      event.keyCode === 68 ||
+      event.keyCode === 81 ||
+      event.keyCode === 69) {
+    sendCommand('stop')
   }
 }
