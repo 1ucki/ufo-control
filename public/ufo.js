@@ -3,15 +3,20 @@ const battery = document.querySelector('#battery')
 const altitude = document.querySelector('#altitude')
 const slider = document.querySelector('#speed')
 
-const socket = new WebSocket('ws://c-zero-remote.local:3001')
+let socket
 
-function interface(state) {
-  console.log(state.battery)
+try {
+  socket = new WebSocket('ws://localhost:3001')
+} catch {
+  socket = new WebSocket('ws://c-zero-remote.local:3001')
+}
+
+function interface (state) {
   battery.innerText = state.battery
   altitude.innerText = state.altitude
 }
 
-function stream(buffer) {
+function stream (buffer) {
   const int8Array = new Uint8Array(buffer.data)
   const blob = new Blob([int8Array], { type: 'image/png' })
   const url = URL.createObjectURL(blob)
@@ -23,7 +28,7 @@ function stream(buffer) {
   }, 500)
 }
 
-function sendCommand(command) {
+function sendCommand (command) {
   const msg = {
     type: 'command',
     command: command
@@ -32,7 +37,7 @@ function sendCommand(command) {
   socket.send(JSON.stringify(msg))
 }
 
-function sendValue(value) {
+function sendValue (value) {
   const msg = {
     type: 'value',
     value: 'speed',
