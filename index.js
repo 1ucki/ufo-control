@@ -15,6 +15,8 @@ const client = drone.createClient({ frameRate: 2 })
 const stream = client.getPngStream()
 
 client.on('navdata', data => {
+  if (!data.demo) return
+
   state.status = data.demo.flyState
   state.battery = data.demo.batteryPercentage
   state.rotation = data.demo.rotation
@@ -86,6 +88,8 @@ wss.on('connection', function connection(ws) {
       type: 'state',
       state: state
     }
+
+    console.log(state)
 
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify(msg))
