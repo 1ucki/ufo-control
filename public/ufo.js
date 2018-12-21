@@ -8,7 +8,7 @@ let socket
 try {
   socket = new WebSocket('ws://localhost:3001')
 } catch {
-  socket = new WebSocket('ws://c-zero-remote:3001')
+  socket = new WebSocket('ws://c-zero-remote.local:3001')
 }
 
 function interface(state) {
