@@ -20,7 +20,7 @@ client.on('navdata', data => {
   state.status = data.demo.flyState
   state.battery = data.demo.batteryPercentage
   state.rotation = data.demo.rotation
-  state.altitude = data.demo.altitude
+  state.altitude = data.demo.altitudeMeters
 })
 
 let state = {

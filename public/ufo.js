@@ -34,11 +34,11 @@ socket.addEventListener('message', event => {
 document.onkeydown = (event) => {
   if (event.keyCode === 32) {
     sendCommand('takeoff-land')
-  } else if (event.keyCode === 87) {
-    sendCommand('up')
   } else if (event.keyCode === 38) {
-    sendCommand('down')
+    sendCommand('up')
   } else if (event.keyCode === 40) {
+    sendCommand('down')
+  } else if (event.keyCode === 87) {
     sendCommand('front')
   } else if (event.keyCode === 83) {
     sendCommand('back')
@@ -58,7 +58,9 @@ document.onkeydown = (event) => {
 }
 
 document.onkeyup = (event) => {
-  if (event.keyCode === 87 ||
+  if (event.keyCode === 38 ||
+      event.keyCode === 40 ||
+      event.keyCode === 87 ||
       event.keyCode === 83 ||
       event.keyCode === 65 ||
       event.keyCode === 68 ||
