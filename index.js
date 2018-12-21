@@ -26,10 +26,10 @@ client.on('navdata', data => {
 let state = {
   flying: false,
   status: null,
-  battery: null,
+  battery: 32,
   rotation: null,
-  altitude: null,
-  constants: {
+  altitude: 0.56,
+  values: {
     speed: 0.2
   }
 }
@@ -51,17 +51,17 @@ wss.on('connection', function connection(ws) {
       } else if (msg.command === 'stop') {
         client.stop()
       } else if (msg.command === 'up') {
-        client.up(state.constants.speed)
+        client.up(state.values.speed)
       } else if (msg.command === 'down') {
-        client.down(state.constants.speed)
+        client.down(state.values.speed)
       } else if (msg.command === 'front') {
-        client.front(state.constants.speed)
+        client.front(state.values.speed)
       } else if (msg.command === 'back') {
-        client.back(state.constants.speed)
+        client.back(state.values.speed)
       } else if (msg.command === 'left') {
-        client.left(state.constants.speed)
+        client.left(state.values.speed)
       } else if (msg.command === 'right') {
-        client.right(state.constants.speed)
+        client.right(state.values.speed)
       } else if (msg.command === 'counter-clockwise') {
         client.counterClockwise(1)
       } else if (msg.command === 'clockwise') {
@@ -73,6 +73,10 @@ wss.on('connection', function connection(ws) {
       } else if (msg.command === 'calibrate') {
         client.calibrate(0)
       }
+    } else if (msg.type === 'value') {
+        if (msg.value === 'speed') {
+          state.values.speed = msg.data
+        }
     }
   })
   

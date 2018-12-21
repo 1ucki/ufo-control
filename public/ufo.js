@@ -1,6 +1,16 @@
 const image = document.querySelector('#stream')
+const battery = document.querySelector('#battery')
+const altitude = document.querySelector('#altitude')
+const slider = document.querySelector('#speed')
+
 
 const socket = new WebSocket('ws://localhost:3001')
+
+function interface(state) {
+  console.log(state.battery)
+  battery.innerText = state.battery
+  altitude.innerText = state.altitude
+}
 
 function stream(buffer) {
   const int8Array = new Uint8Array(buffer.data)
@@ -23,13 +33,29 @@ function sendCommand(command) {
   socket.send(JSON.stringify(msg))
 }
 
+function sendValue(value) {
+  const msg = {
+    type: 'value',
+    value: 'speed',
+    data: value
+  }
+
+  socket.send(JSON.stringify(msg))
+}
+
 socket.addEventListener('message', event => {
   const msg = JSON.parse(event.data)
 
   if (msg.type === 'buffer') {
     stream(msg.buffer)
+  } else if (msg.type === 'state') {
+    interface(msg.state)
   }
 })
+
+slider.oninput = (event) => {
+  sendValue(event.srcElement.value * 2 / 10)
+}
 
 document.onkeydown = (event) => {
   if (event.keyCode === 32) {
