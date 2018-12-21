@@ -3,13 +3,7 @@ const battery = document.querySelector('#battery')
 const altitude = document.querySelector('#altitude')
 const slider = document.querySelector('#speed')
 
-let socket
-
-try {
-  socket = new WebSocket('ws://localhost:3001')
-} catch {
-  socket = new WebSocket('ws://c-zero-remote.local:3001')
-}
+const socket = new WebSocket('ws://c-zero-remote.local:3001')
 
 function interface(state) {
   console.log(state.battery)
