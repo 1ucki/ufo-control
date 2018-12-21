@@ -35,6 +35,10 @@ document.onkeydown = (event) => {
   if (event.keyCode === 32) {
     sendCommand('takeoff-land')
   } else if (event.keyCode === 87) {
+    sendCommand('up')
+  } else if (event.keyCode === 38) {
+    sendCommand('down')
+  } else if (event.keyCode === 40) {
     sendCommand('front')
   } else if (event.keyCode === 83) {
     sendCommand('back')
@@ -46,6 +50,10 @@ document.onkeydown = (event) => {
     sendCommand('counter-clockwise')
   } else if (event.keyCode === 69) {
     sendCommand('clockwise')
+  } else if (event.keyCode === 67) {
+    sendCommand('calibrate')
+  } else if (event.keyCode === 27) {
+    sendCommand('disable-emergency')
   }
 }
 

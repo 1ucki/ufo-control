@@ -50,6 +50,10 @@ wss.on('connection', function connection(ws) {
         }
       } else if (msg.command === 'stop') {
         client.stop()
+      } else if (msg.command === 'up') {
+        client.up(state.constants.speed)
+      } else if (msg.command === 'down') {
+        client.down(state.constants.speed)
       } else if (msg.command === 'front') {
         client.front(state.constants.speed)
       } else if (msg.command === 'back') {
