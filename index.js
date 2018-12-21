@@ -14,12 +14,22 @@ app.listen(port)
 const client = drone.createClient({ frameRate: 2 })
 const stream = client.getPngStream()
 
-/* client.on('navdata', data => {
-  console.log(data.demo.batteryPercentage)
-}) */
+client.on('navdata', data => {
+  state.status = data.demo.flyState
+  state.battery = data.demo.batteryPercentage
+  state.rotation = data.demo.rotation
+  state.altitude = data.demo.altitude
+})
 
 let state = {
-  flying: false
+  flying: false,
+  status: null,
+  battery: null,
+  rotation: null,
+  altitude: null,
+  constants: {
+    speed: 0.2
+  }
 }
 
 wss.on('connection', function connection(ws) {
@@ -39,19 +49,23 @@ wss.on('connection', function connection(ws) {
       } else if (msg.command === 'stop') {
         client.stop()
       } else if (msg.command === 'front') {
-        client.front(0.2)
+        client.front(state.constants.speed)
       } else if (msg.command === 'back') {
-        client.back(0.2)
+        client.back(state.constants.speed)
       } else if (msg.command === 'left') {
-        client.left(0.2)
+        client.left(state.constants.speed)
       } else if (msg.command === 'right') {
-        client.right(0.2)
+        client.right(state.constants.speed)
       } else if (msg.command === 'counter-clockwise') {
         client.counterClockwise(1)
       } else if (msg.command === 'clockwise') {
         client.clockwise(1)
       } else if (msg.command === 'blink') {
         client.animateLeds('blinkRed', 5, 1)
+      } else if (msg.command === 'disable-emergency') {
+        client.disableEmergency()
+      } else if (msg.command === 'calibrate') {
+        client.calibrate(0)
       }
     }
   })
@@ -66,6 +80,17 @@ wss.on('connection', function connection(ws) {
       ws.send(JSON.stringify(msg))
     }
   })
+
+  setInterval(() => {
+    const msg = {
+      type: 'state',
+      state: state
+    }
+
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify(msg))
+    }
+  }, 500)
 })
 
 console.log(`ufo streamin' at http://localhost:${ port }`)
