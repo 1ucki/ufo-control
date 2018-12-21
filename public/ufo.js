@@ -5,10 +5,10 @@ const slider = document.querySelector('#speed')
 
 let socket
 
-try {
-  socket = new WebSocket('ws://localhost:3001')
-} catch {
+if (new WebSocket('ws://c-zero-remote.local:3001')) {
   socket = new WebSocket('ws://c-zero-remote.local:3001')
+} else {
+  socket = new WebSocket('ws://localhost:3001')
 }
 
 function interface (state) {
