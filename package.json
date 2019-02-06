@@ -19,6 +19,9 @@
   "dependencies": {
     "ar-drone": "^0.3.3",
     "express": "^4.16.4",
+    "from": "^0.1.7",
+    "opencv": "git+https://github.com/peterbraden/node-opencv.git",
+    "source": "0.0.3",
     "ws": "^6.1.2"
   }
 }

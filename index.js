@@ -2,6 +2,7 @@ const path = require('path')
 const express = require('express')
 const WebSocket = require('ws')
 const drone = require('ar-drone')
+const cv = require('opencv')
 
 const wss = new WebSocket.Server({ port: 3001 })
 
@@ -24,18 +25,19 @@ client.on('navdata', data => {
 })
 
 let state = {
+  detect: true,
   flying: false,
   status: null,
-  battery: 32,
+  battery: 666,
   rotation: null,
-  altitude: 0.56,
+  altitude: 666,
   values: {
     speed: 0.2
   }
 }
 
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(data) {
+wss.on('connection', ws => {
+  ws.on('message', data => {
     const msg = JSON.parse(data)
     console.log(msg)
 
@@ -89,6 +91,30 @@ wss.on('connection', function connection(ws) {
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify(msg))
     }
+
+    if (state.detect) {
+      cv.readImage(buffer, (err, image) => {
+        if (err) console.log(err)
+
+        image.detectObject(cv.FACE_CASCADE, {}, (err, faces) => {
+          if (err) console.log(err)
+          if (faces.length === 0) return
+
+          const face = faces.reduce((a, b) => b.width > a.width ? b : a)
+          const play = 50
+
+          /* Centered face x: 270, y: 100, width: 100, height: 100 */
+
+          console.log(face)
+          if (face.width > 100 + play) client.back(state.values.speed)
+          if (face.width < 100 - play) client.front(state.values.speed)
+          if (face.x > 270 + play) client.clockwise(1)
+          if (face.x < 270 - play) client.counterClockwise(1)
+          if (face.y > 100 + play) client.down(state.values.speed)
+          if (face.y < 100 - play) client.up(state.values.speed)
+        })
+      })
+    }
   })
 
   setInterval(() => {
@@ -96,8 +122,6 @@ wss.on('connection', function connection(ws) {
       type: 'state',
       state: state
     }
-
-    console.log(state)
 
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify(msg))
